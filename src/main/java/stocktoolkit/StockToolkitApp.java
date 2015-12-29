@@ -17,7 +17,7 @@ public class StockToolkitApp {
 	private String code;
 	private String ind;
 	private Integer opr;
-	private Integer targetValue;
+	private Double targetValue;
 
 	static String[] colNames = {
 			"market",
@@ -77,7 +77,7 @@ public class StockToolkitApp {
 					default:
 						throw new IllegalArgumentException("Unknown opr: " + arg);
 					}
-					targetValue = Integer.parseInt(arr[3]);
+					targetValue = Double.parseDouble(arr[3]);
 					break;
 				default:
 					throw new IllegalArgumentException("Unknown parameter: " + arg);
@@ -91,10 +91,11 @@ public class StockToolkitApp {
 	}
 
 	private void printUsage() {
-		System.out.println("Options:\n"
-				+ "--code:<the code of your quote, i.e. 601818>\n"
-				+ "--ind:<the index name, i.e. gts5b>\n"
-				+ ":<lt for less than, gt for great than, eq for equal>\n"
+		System.out.println("Options: --code:<quote> --ind:<index>:<operator>:<value>\n"
+				+ "\n"
+				+ "--code:<quote code, i.e. 601818>\n"
+				+ "--ind:<index name, i.e. gts5b>\n"
+				+ ":<operator, lt for less than, gt for great than, eq for equal>\n"
 				+ ":<value of the condition>\n");
 	}
 
@@ -109,12 +110,12 @@ public class StockToolkitApp {
 			
 			
 			System.out.print("Monitoring ");
-			int value = 0;
+			double value = 0;
 			for (boolean result = false; !result; ) {
 				String content = readQuote(code);
 				String[] cols = parse(content);
 				
-				value = Integer.parseInt(cols[colNameMap.get(ind)]);
+				value = Double.parseDouble(cols[colNameMap.get(ind)]);
 				switch (opr) {
 				case OPR_LT:
 					result = value < targetValue;
